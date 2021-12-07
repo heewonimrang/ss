@@ -1,0 +1,382 @@
+<!DOCTYPE HTML PUBLIC "MerryX-mas">
+<html>
+ <head>
+  <title> MerryX-mas</title>
+    <link rel="stylesheet" type="text/css" href="neon.css">
+                
+                <style type="text/css"> 
+                    .neon{ font-size:170px;
+                    } 
+                    body{ margin: 10px; background: #D0D0D0; }
+                    #myCanvas{background: #FFF; border: #909090 1px solid;}
+                </style>
+
+
+<script type="text/javascript">
+
+(function ()
+{
+    function k(a, b, c)
+    {
+        if (a.addEventListener) {
+            a.addEventListener(b, c, false);
+        }
+        else {
+            a.attachEvent && a.attachEvent("on" + b, c);
+        }
+    }
+    function g(a)
+    {
+        if (typeof window.onload != "function")
+        {
+            window.onload = a;
+        }
+        else {
+            var b = window.onload;
+            window.onload = function ()
+            {
+                b();
+                a()
+            }
+        }
+    }
+    function h()
+    {
+        var a = {};
+        for (type in {
+            Top : "", Left : ""
+        })
+        {
+            var b = type == "Top" ? "Y" : "X";
+            if (typeof window["page" + b + "Offset"] != "undefined") {
+                a[type.toLowerCase()] = window["page" + b + "Offset"];
+            }
+            else
+            {
+                b = document.documentElement.clientHeight ? document.documentElement : document.body;
+                a[type.toLowerCase()] = b["scroll" + type];
+            }
+        }
+        return a
+    }
+    function l()
+    {
+        var a = document.body, b;
+        if (window.innerHeight) {
+            b = window.innerHeight;
+        }
+        else if (a.parentElement.clientHeight) {
+            b = a.parentElement.clientHeight;
+        }
+        else if (a && a.clientHeight) {
+            b = a.clientHeight;
+        }
+        return b
+    }
+    function i(a)
+    {
+        this.parent = document.body;
+        this.createEl(this.parent, a);
+        this.size = Math.random() * 4 + 4;
+        this.el.style.width = Math.round(this.size) + "px";
+        this.el.style.height = Math.round(this.size) + "px";
+        this.maxLeft = document.body.offsetWidth - this.size;
+        this.maxTop = document.body.offsetHeight - this.size;
+        this.left = Math.random() * this.maxLeft;
+        this.top = h().top + 1;
+        this.angle = 1.4 + 0.2 * Math.random();
+        this.minAngle = 1.4;
+        this.maxAngle = 1.6;
+        this.angleDelta = 0.01 * Math.random();
+        this.speed = 4 + Math.random()
+    }
+    var j = false;
+    g(function ()
+    {
+        j = true;
+    });
+    var f = true;
+    window.createSnow = function (a, b)
+    {
+        if (j)
+        {
+            var c = [], m = setInterval(function ()
+            {
+                f && b > c.length && Math.random() < b * 0.0025 && c.push(new i(a));
+                !f && !c.length && clearInterval(m);
+                for (var e = h().top, n = l(), d = c.length - 1; d >= 0; d--) if (c[d]) if (c[d].top < e || c[d].top + c[d].size + 1 > e + n) {
+                    c[d].remove();
+                    c[d] = null;
+                    c.splice(d, 1)
+                }
+                else {
+                    c[d].move();
+                    c[d].draw()
+                }
+            }, 40);
+            k(window, "scroll", function ()
+            {
+                for (var e = c.length - 1; e >= 0; e--) {
+                    c[e].draw();
+                }
+            })
+        }
+        else {
+            g(function () 
+            {
+                createSnow(a, b) 
+            });
+        }
+    };
+    window.removeSnow = function ()
+    {
+        f = false;
+    };
+    i.prototype = 
+    {
+        createEl : function (a, b)
+        {
+            this.el = document.createElement("img");
+            this.el.setAttribute("src", b + "./img/snow" + Math.floor(Math.random() * 4) + ".gif");
+            this.el.style.position = "absolute";
+            this.el.style.display = "block";
+            this.el.style.zIndex = "99999";
+            this.parent.appendChild(this.el)
+        },
+        move : function ()
+        {
+            if (this.angle < this.minAngle || this.angle > this.maxAngle) {
+                this.angleDelta =- this.angleDelta;
+            }
+            this.angle += this.angleDelta;
+            this.left += this.speed * Math.cos(this.angle * Math.PI);
+            this.top -= this.speed * Math.sin(this.angle * Math.PI);
+            if (this.left < 0) {
+                this.left = this.maxLeft;
+            }
+            else if (this.left > this.maxLeft) {
+                this.left = 0;
+            }
+        },
+        draw : function ()
+        {
+            this.el.style.top = Math.round(this.top) + "px";
+            this.el.style.left = Math.round(this.left) + "px";
+        },
+        remove : function ()
+        {
+            this.parent.removeChild(this.el);
+            this.parent = this.el = null;
+        }
+    }
+})
+();
+</script>
+
+        <script>
+            createSnow('./', 2000);
+        	
+        </script>
+
+ </head>
+
+                <body bgcolor="black">
+                    
+                            <canvas id="myCanvas" height="800" width="800" style="border: 2px solid black">
+                              </canvas><br>
+
+                        <link rel="stylesheet" type="text/css" href="neon.css">
+                            <style type="text/css"> 
+                                .neon{ font-size:40px;
+                                } 
+                            </style>
+
+                    <h3 style="color:black;">! 5초정도 기다리면 첫눈이 올거에요 !</h3>
+                    <p id="color"></p>
+
+                    <script>
+
+
+
+                            
+                        var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                        context.fillStyle = "black";
+                        context.fillRect(0,0,800,800);
+
+                             for (var i=0; i<4; i++) {       
+                               context.fillStyle = "#040035";
+                               context.fillRect(80+i*260,330+i*0,230,420);
+       
+                               context.fillStyle = "#686104" ;
+                               context.fillRect(120+i*300,400+i*0,80,50);
+                               context.fillRect(250,400,80,50);
+
+                               context.fillRect(120,500,80,50);
+                               context.fillRect(250,500,80,50);
+      
+                               context.fillRect(120,600,80,50);
+                               context.fillRect(250,600,80,50);
+                               context.fillRect(190, 700, 70, 100);
+                                   //    context.fillRect(5+i*25, 10, 20, 30); 
+                               }
+                               context.fillStyle = "#16154f";
+                               context.fillRect(500,400,250,450);
+      
+                               context.fillStyle = "#a09802";
+                               context.fillRect(520,450,80,50);
+                               context.fillRect(650,450,80,50);
+
+                               context.fillRect(520,550,80,50);
+                               context.fillRect(650,550,80,50);
+      
+                               context.fillRect(520,650,80,50);
+                               context.fillRect(650,650,80,50);
+      
+                               context.fillRect(590, 750, 70, 100);
+
+
+                        var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                         context.fillStyle = "brown"; context.fillRect(0, 0, 800, 30); context.fillRect(0,770,800,30); context.fillRect(0,0,30,800); context.fillRect(770,0,30,800);
+
+                //트리 맨위//
+                        var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                         context.moveTo(400,180);
+                         context.lineTo(300,320);
+                         context.lineTo(360,320);
+                         context.lineTo(400,180);
+                         context.fillStyle = "#47b649";
+                         context.fill();
+                         context.stroke();
+
+                         var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                          context.moveTo(500,320);
+                         context.lineTo(400,180);
+                         context.lineTo(360,320);
+                         context.fillStyle = "#9ccc3c";
+                         context.fill();
+                         context.stroke();
+                //트리 두 번째//
+
+                         var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                          context.moveTo(340,320);
+                         context.lineTo(380,320);
+                         context.lineTo(340,440);
+                         context.lineTo(260,440);
+                         context.fillStyle = "#9ccc3c";
+                         context.fill();
+                         context.stroke();
+
+                var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                          context.moveTo(380,320);
+                         context.lineTo(460,320);
+                         context.lineTo(550,440);
+                         context.lineTo(340,440);
+                         context.fillStyle = "#9ccc3c";
+                         context.fill();
+                         context.stroke();
+                //트리 세 번째//
+                    var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                          context.moveTo(320,440);
+                         context.lineTo(220,580);
+                         context.lineTo(340,580);
+                         context.lineTo(375,440);
+                         context.fillStyle = "#47b649";
+                         context.fill();
+                         context.stroke();
+
+                         var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                          context.moveTo(375,440);
+                         context.lineTo(340,580);
+                         context.lineTo(580,580);
+                         context.lineTo(500,440);
+                         context.fillStyle = "#47b649";
+                         context.fill();
+                         context.stroke();
+
+                     
+                      
+                      //나무
+                      context.fillStyle = "brown"; context.fillRect(360,580,80,140);
+                      
+                      
+                      
+                      //선물상자 
+                      context.fillStyle = "red"; context.fillRect(140,520,120,180); context.fillRect(500,640,120,90);  context.fillRect(490,620,140,20);
+                      context.fillStyle = "#f48414"; context.fillRect(140,580,120,40); context.fillRect(180,520,40,180);  
+                      
+
+                      context.fillStyle = "#e0c503"; context.fillRect(240,600,160,140); 
+                      context.fillStyle = "green"; context.fillRect(100,660,100,100); context.fillRect(90,640,120,20);  context.fillRect(300,600,20,140);  context.fillRect(240,660,160,20);          
+                      context.fillStyle = "#2432ea"; context.fillRect(140,640,20,110); context.fillRect(550,640,20,90); context.fillRect(500,660,120,20);
+
+                      
+                      //크리스마스 장식 볼
+                      var canvas = document.getElementById("myCanvas");
+                      var ctx = canvas.getContext("2d");
+                      var inColor = prompt("좋아하는 색상은 : ", "red");
+                         document.getElementById("color").innerHTML = "이번 크리스마스는 " + inColor +  "빛깔로 반짝이는군요.";  
+
+                      ctx.beginPath();
+                      ctx.arc(340, 270, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(440, 230, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(400, 310, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(300, 370, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(520, 390, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(440, 430, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(280, 490, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(360, 570, 20, 0, Math.PI * 2);ctx.closePath();
+                      ctx.arc(480, 530, 20, 0, Math.PI * 2);ctx.closePath();//arc(시작 X좌표 , 시작Y좌표 , 반지름 크기, 시작각도, 끝 각도 , 시계or반시계 방향true/false)
+                      ctx.fillStyle = inColor;
+                      ctx.fill(); 
+                    
+
+
+                        var canvas = document.getElementById("myCanvas");
+                        var ctx = canvas.getContext("2d");     
+                        ctx.beginPath(400,60);
+                         context.lineTo(380,120);
+                         context.lineTo(320,120);
+                         context.lineTo(360,160);
+                         context.lineTo(340,220);
+                         context.lineTo(400,180);
+                         context.lineTo(460,220);
+                         context.lineTo(440,160);
+                         context.lineTo(480,120);
+                         context.lineTo(420,120);
+                         context.lineTo(400,60);
+                         context.fillstyle = inColor;
+                         context.fill();
+                         context.stroke();
+
+
+                    ctx.beginPath();
+                    ctx.arc(400, 1700, 1000, 0, Math.PI * 2);ctx.closePath();
+                    ctx.fillStyle = "white";
+                    ctx.fill(); 
+                    
+                 
+
+
+
+                    </script>
+     
+                        <span class="notranslate">
+                            <div class="container">    
+                                 <div class="neon">Merry Christmas
+                                  </div>
+                            </div>
+                        </span>
+
+
+
+                         </body>
+
+</html>
